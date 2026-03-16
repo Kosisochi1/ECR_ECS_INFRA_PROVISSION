@@ -103,3 +103,39 @@ ECR_ECS_INFRA_PROVISSION/
 └── .github/workflows
      └── deploy.yml
 ```
+
+### 🚀 Deployment Steps
+
+1️⃣ Initialize Terraform
+```
+terraform init
+```
+2️⃣ Plan Infrastructure
+```
+terraform plan
+```
+3️⃣ Deploy Infrastructure
+```
+terraform apply
+```
+
+### 🌐 Accessing the Application
+
+Once deployment completes, obtain the Load Balancer DNS name:
+
+```
+terraform output
+```
+
+Then access:
+
+```
+http://<load-balancer-dns>
+```
+
+### 🧹 Destroy Infrastructure
+
+To remove all resources:
+```
+terraform destroy --auto-approve
+```
