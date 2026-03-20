@@ -7,6 +7,9 @@ on:
 
 permissions:
   contents: read
+env:
+  TF_VAR_mongo_uri: ${{ secrets.TF_VAR_mongo_uri}}
+  TF_VAR_jwt_secret_key: ${{ secrets.TF_VAR_jwt_secret_key}}
 
 jobs:
   terraform:
