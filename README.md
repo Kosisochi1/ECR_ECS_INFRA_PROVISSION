@@ -139,3 +139,10 @@ To remove all resources:
 ```
 terraform destroy --auto-approve
 ```
+
+
+### 🔄 CI/CD Pipeline (GitHub Actions → ECR → ECS)
+
+This project includes a fully automated CI/CD pipeline using GitHub Actions to:
+
+- Provision the Infrastructure on push to the main
