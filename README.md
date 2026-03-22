@@ -94,17 +94,30 @@ aws configure
 ```
 ECR_ECS_INFRA_PROVISSION/
 │
-├── main.tf
+├── main.tf                # root orchestration
 ├── variables.tf
 ├── outputs.tf
-├── provider.tf
-├── 
+│
+├── modules/
+│   ├── vpc/
+│   ├── security_group/
+│   ├── ecr/
+│   ├── ecs/
+│   ├── alb/
+│   └── secrets/
 │
 └── .github/workflows
      └── deploy.yml
 ```
 
 ### 🚀 Deployment Steps
+
+Clone the Repo
+```
+git clone https://github.com/Kosisochi1/ECR_ECS_INFRA_PROVISSION.git
+
+cd ECR_ECS_INFRA_PROVISSION
+```
 
 1️⃣ Initialize Terraform
 ```
