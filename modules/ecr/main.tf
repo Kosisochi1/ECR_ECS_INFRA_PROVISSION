@@ -1,3 +1,8 @@
+###################################
+# ECR
+###################################
+
+
 resource "aws_ecr_repository" "repo" {
   name                 = var.app_name
   image_tag_mutability = "MUTABLE"

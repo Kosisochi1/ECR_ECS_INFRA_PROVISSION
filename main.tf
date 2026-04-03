@@ -58,12 +58,20 @@ module "ecs" {
   target_group_arn = module.alb.target_group_arn
   secret_arn       = module.secrets.secret_arn
   listener_http    = module.alb
+  secret_policy    = module.secrets.secret_policy
 
 
 
 
 }
+module "s3_storage" {
+  source                 = "./modules/s3_storage"
+  task_definition_bucket = var.task_definition_bucket
+  local_content          = module.ecs.task_definition_json
+  s3_key                 = var.s3_key
 
+
+}
 
 
 

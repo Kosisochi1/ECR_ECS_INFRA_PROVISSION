@@ -10,3 +10,6 @@ variable "secret_arn" {}
 variable "listener_http" {
 
 }
+variable "secret_policy" {
+
+}

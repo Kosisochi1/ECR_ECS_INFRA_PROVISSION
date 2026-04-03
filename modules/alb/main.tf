@@ -1,3 +1,8 @@
+#############################
+#  Application Load Balancer
+#############################
+
+
 resource "aws_lb" "app_lb" {
   name               = "much-to-do-lb"
   internal           = false
@@ -5,6 +10,10 @@ resource "aws_lb" "app_lb" {
   subnets            = var.subnets
   security_groups    = [var.alb_sg]
 }
+
+#############################
+# Target Group
+#############################
 
 resource "aws_lb_target_group" "app_tg" {
   name        = "much-to-do-tg"
@@ -22,6 +31,11 @@ resource "aws_lb_target_group" "app_tg" {
   }
 
 }
+
+
+####################################
+# Listener
+####################################
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.app_lb.arn

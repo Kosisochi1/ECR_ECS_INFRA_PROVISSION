@@ -10,6 +10,8 @@ resource "aws_iam_role" "ecs_demo_app_task_role" {
           Service = "ecs-tasks.amazonaws.com"
         }
         Action = "sts:AssumeRole"
+
+
       }
     ]
   })
@@ -20,9 +22,38 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_role_attach" {
   role       = aws_iam_role.ecs_demo_app_task_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+
+resource "aws_iam_role" "ecs_task_role" {
+  name = "${var.app_name}-task-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+}
+
+
+
+
+resource "aws_iam_role_policy_attachment" "task_attach" {
+  role       = aws_iam_role.ecs_task_role.name
+  policy_arn = var.secret_policy
+
+}
+
+
 resource "aws_iam_user_policy" "pass_role_policy" {
   name = "PassECSRole"
-  user = "Kosi_user"
+  user = "Giovanni"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -30,7 +61,7 @@ resource "aws_iam_user_policy" "pass_role_policy" {
       {
         Effect   = "Allow"
         Action   = "iam:PassRole"
-        Resource = ["arn:aws:iam::710271940761:role/much_todo_demo-role"]
+        Resource = [aws_iam_role.ecs_task_role.arn, aws_iam_role.ecs_demo_app_task_role.arn]
       }
     ]
   })
@@ -42,14 +73,6 @@ resource "aws_ecs_cluster" "demo_app_cluster" {
 }
 
 
-
-
-
-
-
-
-
-
 resource "aws_ecs_task_definition" "demo_app_task" {
   family                   = var.app_name
   network_mode             = "awsvpc"
@@ -57,11 +80,11 @@ resource "aws_ecs_task_definition" "demo_app_task" {
   cpu                      = var.cpu
   memory                   = var.memory
   execution_role_arn       = aws_iam_role.ecs_demo_app_task_role.arn
-  task_role_arn            = aws_iam_role.ecs_demo_app_task_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([
     {
       name      = var.app_name
-      image     = "${var.repo_url}:latest"
+      image     = "REPLACED_AT_RUNTIME"
       essential = true
       portMappings = [
         {
@@ -109,6 +132,23 @@ resource "aws_ecs_task_definition" "demo_app_task" {
 
   )
 
+}
+
+locals {
+  ecs_task_definition_json = jsonencode({
+
+    family                  = aws_ecs_task_definition.demo_app_task.family
+    networkMode             = aws_ecs_task_definition.demo_app_task.network_mode
+    requiresCompatibilities = aws_ecs_task_definition.demo_app_task.requires_compatibilities
+    cpu                     = aws_ecs_task_definition.demo_app_task.cpu
+    memory                  = aws_ecs_task_definition.demo_app_task.memory
+    executionRoleArn        = aws_iam_role.ecs_demo_app_task_role.arn
+    taskRoleArn             = aws_iam_role.ecs_task_role.arn
+
+
+
+    containerDefinitions = jsondecode(aws_ecs_task_definition.demo_app_task.container_definitions)
+  })
 }
 
 

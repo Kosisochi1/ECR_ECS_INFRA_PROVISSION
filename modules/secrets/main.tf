@@ -66,6 +66,36 @@ resource "aws_iam_policy" "secret_key_policy" {
         ]
         Resource = aws_kms_key.secret-KEY.arn
 
+        }, {
+        Effect = "Allow"
+        "Action" : [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload"
+        ]
+
+        Resource = "*"
+
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecs:CreateCluster",
+          "ecs:DeregisterContainerInstance",
+          "ecs:DiscoverPollEndpoint",
+          "ecs:Poll",
+          "ecs:RegisterContainerInstance",
+          "ecs:StartTelemetrySession",
+          "ecs:UpdateContainerInstancesState",
+          "ecs:Submit*"
+        ]
+
+        Resource = "*"
+
+
       }
     ]
   })
