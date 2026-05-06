@@ -14,7 +14,7 @@ env:
   TF_VAR_jwt_secret_key: ${{ secrets.TF_VAR_jwt_secret_key}}
 
 jobs:
-  terraform:
+  security:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
@@ -51,6 +51,21 @@ jobs:
         exit-code: 1
       
 
+       
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    environment: production
+    needs: security
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+      
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3

@@ -15,8 +15,12 @@ resource "aws_kms_alias" "secret_alias" {
 }
 
 
-resource "aws_secretsmanager_secret" "secret_manager" {
-  name        = var.app_name
+resource "random_id" "suffix_scerete" {
+  byte_length = 3
+}
+
+resource "aws_secretsmanager_secret" "secret_managerv2" {
+  name        = "var.app_name-${random_id.suffix_scerete.hex}"
   description = "storing all secret keys for much_to_do app"
   kms_key_id  = aws_kms_key.secret-KEY.key_id
 
@@ -25,7 +29,7 @@ resource "aws_secretsmanager_secret" "secret_manager" {
 
 resource "aws_secretsmanager_secret_version" "demo_app_secret_key" {
 
-  secret_id = aws_secretsmanager_secret.secret_manager.id
+  secret_id = aws_secretsmanager_secret.secret_managerv2.id
   secret_string = jsonencode({
     MONGO_URI = var.mongo_uri,
     LOG_LEVEL = "DEBUG",
@@ -57,7 +61,7 @@ resource "aws_iam_policy" "secret_key_policy" {
           "secretsmanager:DescribeSecret",
           "secretsmanager:ListSecrets"
         ]
-        Resource = aws_secretsmanager_secret.secret_manager.arn
+        Resource = aws_secretsmanager_secret.secret_managerv2.arn
         }, {
         Effect = "Allow"
         Action = [
