@@ -155,7 +155,7 @@ jobs:
   destroy:
    
     name: 'Terraform Destroy'
-    needs: terraform
+    # needs: terraform
     runs-on: ubuntu-latest
     environment: production
     defaults:
