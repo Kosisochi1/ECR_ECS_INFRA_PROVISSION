@@ -184,9 +184,6 @@ jobs:
           aws secretsmanager delete-secret \
           --secret-id much_to_do \
           --force-delete-without-recovery
-          aws secretsmanager delete-secret \
-          --secret-id much_to_do \
-          --force-delete-without-recovery
             aws kms delete-alias --alias-name alias/much_to_do-key || true
             aws iam delete-policy \
             --policy-arn arn:aws:iam::040162742402:policy/much_to_do-secrets-policy
