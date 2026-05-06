@@ -27,7 +27,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 2
+        fetch-depth: 0
 
 
     - name: Setup GitLeak
@@ -68,7 +68,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 2
+        fetch-depth: 0
       
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
