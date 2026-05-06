@@ -1,9 +1,10 @@
-name: 'IaC'
+name: 'Provissioning of ECR+ECS Infrastructure'
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
+      branches: [ "main" ]
 
 permissions:
   contents: read
@@ -26,6 +27,24 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
+
+
+
+    - name: Run Checkov (Terraform Scan)
+      uses: bridgecrewio/checkov-action@master
+      with:
+        directory: '.'
+        framework: terraform
+        soft_fail: true
+
+    - name: Run Trivy (Filesystem Scan)
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
+        exit-code: 1
+      
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -53,6 +72,19 @@ jobs:
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    # - name: Terraform Apply
-    #   if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform apply -auto-approve -input=false
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
+
+    - name: Get ALB DNS Output
+      id: alb
+      run: echo "ALB_URL=$(terraform output -raw alb_dns)" >> $GITHUB_ENV
+
+    - name: Run OWASP ZAP Baseline Scan
+      uses: zaproxy/action-baseline@v0.10.0
+      with:
+        target: ${{ env.ALB_URL }}
+        rulefile: 'zap/rules.txt'
+        outpath: 'zap/results'
+        format: 'sarif'
+        failbuild: true
