@@ -13,10 +13,7 @@ output "ecs_cluster_name" {
 
 # }
 
-output "json" {
-  value = module.s3_storage.task_def
 
-}
 
 
 output "alb_dns" {

@@ -1,4 +1,4 @@
-variable "task_definition_bucket" {}
+# variable "task_definition_bucket" {}
 
 variable "s3_key" {}
 

@@ -4,7 +4,7 @@ resource "random_id" "suffix_s3" {
 
 
 resource "aws_s3_bucket" "task_definition" {
-  bucket = "var.task_definition_bucket-${random_id.suffix_s3.hex}"
+  bucket = "much-todo-demo-${random_id.suffix_s3.hex}"
 
 
 }

@@ -27,10 +27,10 @@ variable "cpu" {
 variable "memory" {
   default = "512"
 }
-variable "task_definition_bucket" {
-  default = "task-definition-store-bucket"
+# variable "task_definition_bucket" {
+#   default = "task-definition-store-bucket"
 
-}
+# }
 
 variable "s3_key" {
   default = "task_def.json"

@@ -8,7 +8,7 @@ output "task_role" {
 
 }
 output "cluster_name" {
-  value = aws_ecs_cluster.demo_app_cluster.name
+  value = aws_ecs_cluster.demo_app_cluster.id
 
 }
 
