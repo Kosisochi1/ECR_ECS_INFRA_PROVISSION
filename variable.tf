@@ -18,7 +18,7 @@ variable "app_name" {
 }
 
 variable "port" {
-  default = 4000
+  default = 8080
 }
 
 variable "cpu" {
