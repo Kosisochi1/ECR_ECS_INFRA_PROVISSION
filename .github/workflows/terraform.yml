@@ -15,7 +15,7 @@ env:
 
 jobs:
   security:
-    name: 'Terraform'
+    name: 'Terraform Security Scan'
     runs-on: ubuntu-latest
     environment: production
     defaults:
@@ -55,7 +55,7 @@ jobs:
 
        
   terraform:
-    name: 'Terraform'
+    name: 'Terraform Run Book'
     runs-on: ubuntu-latest
     environment: production
     needs: security
